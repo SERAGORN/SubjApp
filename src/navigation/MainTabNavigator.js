@@ -12,6 +12,7 @@ import EditScheduleScreen from '../screens/EditScheduleScreen'
 import InviteScreen from '../screens/InviteScreen'
 import AddTaskScreen from '../screens/AddTaskScreen'
 import ChatScreen from '../screens/ChatScreen'
+import LoginScreen from '../screens/LoginScreen'
 
 
 import { Icon } from 'react-native-elements'
@@ -89,7 +90,7 @@ const BottomNav = createBottomTabNavigator({
   SettingsStack,
 });
 
-export default createStackNavigator(
+const MainStart = createStackNavigator(
   {
     BottomNav:
     {
@@ -108,3 +109,20 @@ export default createStackNavigator(
     headerMode: 'screen'
   }
 )
+
+export default createStackNavigator({
+  Login: {
+    screen: LoginScreen,
+    navigationOptions:
+    {
+      header: null
+    }
+  },
+  Main:  {
+    screen: MainStart,
+    navigationOptions:
+    {
+      header: null
+    }
+  }
+})

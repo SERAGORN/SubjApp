@@ -1,10 +1,14 @@
 import React from 'react';
 import { Text, ScrollView, View, StyleSheet } from 'react-native';
+import { Query } from 'react-apollo';
+import gql from "graphql-tag"
+import { inject, observer } from 'mobx-react'
 
 const Dimensions = require('Dimensions');
 const { height, width } = Dimensions.get('window');
 
-export default class HomeTasks extends React.Component {
+@inject('store')
+@observer export default class HomeTasks extends React.Component {
     state = {
         fake: [
             {
@@ -65,11 +69,11 @@ export default class HomeTasks extends React.Component {
         )
     }
 
-    renderCards = () => {
+    renderCards = (data) => {
         let that = this
-        let mapper = () => {
+        let mapper = (data) => {
             return (
-                that.state.fake.map((row)=>{
+                data.map((row)=>{
                     return (
                         that.OneCard(row)
                     )
@@ -78,16 +82,51 @@ export default class HomeTasks extends React.Component {
         }
         return (
             <View style={styles.cardsContainer}>
-                {mapper()}
+                {mapper(data)}
             </View>
         )
     }
 
+    queryTasks = () => {
+        return (
+        <Query
+          query={
+            gql` 
+                query group($_id: String!) {
+                    group(_id: $_id) {
+                        tasks {
+                            _id
+                            title
+                            content
+                            subjectId
+                            groupId
+                        }
+                  }
+                }
+              `}
+          variables={{ _id: this.props.store.current_group_id }}
+
+        >
+          {({ loading, error, data, refetch }) => {
+            if (loading) return null;
+            if (error) return null;
+            if (data) {
+                if (this.state.refreshing == true) {
+                  refetch()
+                  this.setState({refreshing: false})
+                }
+              return this.renderCards(data.group.tasks)
+            }
+          }}
+        </Query>
+        )
+    }
+ 
     render() {
         return (
             <View style={styles.container}>
                 {this.renderActTitle()}
-                {this.renderCards()}
+                {this.queryTasks()}
             </View>
         )
     }

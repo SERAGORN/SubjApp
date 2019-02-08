@@ -46,9 +46,9 @@ createUser($first_name: String!, $last_name: String!, $login: String!, $password
         login_pass_val: "123"
     }
 
-    setLoginData = (data) => {
-        this.props.loginSubmit(data)
-    }
+    // setLoginData = (data) => {
+    //     this.props.loginSubmit(data)
+    // }
 
     loginQuery = () => {
         if (this.state.query_lock == 1) {
@@ -63,8 +63,9 @@ createUser($first_name: String!, $last_name: String!, $login: String!, $password
                         <View style={{position: "absolute", bottom: 0, left: 0}}><Text>ERROR</Text></View>
                         );
                         if (data) {
+                            this.props.store.current_group_id = data.user.groups[0]._id
                             this.props.store.main_data = data
-                            this.setState({ query_lock: 0 }, () => this.setLoginData(data.user._id))
+                            this.setState({ query_lock: 0 }, () => this.props.navigation.navigate('Main'))
                             return null
                         }
                     }}

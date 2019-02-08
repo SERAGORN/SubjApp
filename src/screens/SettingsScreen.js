@@ -47,7 +47,6 @@ import gql from "graphql-tag"
           {groups.map((row, key) => {
             return (
                 <TouchableOpacity onPress={() => {
-                  this.props.navigation.navigate('Room', { title: "row.title" })
                   this.props.store.current_group_id = row._id
                 }
                 }

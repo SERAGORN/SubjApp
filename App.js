@@ -20,6 +20,7 @@ const cache = new InMemoryCache();
 export default class App extends React.Component {
   constructor (props) {
     super(props)
+    console.disableYellowBox = true;
     this.state = {
     isLoadingComplete: false,      
     login: false
@@ -41,16 +42,9 @@ export default class App extends React.Component {
   }
 
   renderLogin = () => {
-    if (this.state.login == true) {
       return (
         <AppNavigator />
       ) 
-    } else {
-      return (
-        <LoginScreen loginSubmit = {this.loginSubmit} />
-      )
-    }
-
   }
 
   AppRender () {

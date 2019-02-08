@@ -48,7 +48,19 @@ import FeedUsers from "../components/FeedUsers"
 
   renderMain = () => {
     return (
-      <ScrollView>
+      <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={()=>{
+             this.setState({refreshing: true}, () => 
+             setTimeout(()=> {
+               this.setState({refreshing: false})
+             }), 1000)
+          }}
+        />
+      }
+      >
         <FeedUsers navigate={this.props.navigation}/>
         <HomeTasks />
       </ScrollView>
@@ -86,6 +98,7 @@ import FeedUsers from "../components/FeedUsers"
 
 
   render() {
+    if (!this.state.refreshing) { 
     return (
       <View style={styles.container}>
         {this.renderMain()}
@@ -99,7 +112,10 @@ import FeedUsers from "../components/FeedUsers"
         </View>
       </View>
     );
+  } else {
+    return null
   }
+}
 }
 
 const styles = StyleSheet.create({
